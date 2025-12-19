@@ -1,0 +1,44 @@
+        pipeline {
+            agent any
+            environment {
+                name="Rauf Malik"
+            }
+            parameters {
+                string(name: 'Person name', defaultValue: 'Malik', description: 'Who are you??')
+                booleanParam(name: 'isReady', defaultValue: true, description: 'Are you ready to proceed??')
+                choice(name: 'City', choices: ['Multan', 'DGK', 'Lahore', 'Quetta'], description: 'Select your city') }
+            stages {
+                stage("Test Phase") {
+                    steps {
+                        echo "Testing"
+                    }
+                }
+                stage("Build Phase") {
+                    steps {
+                        echo "Building"
+                        sh 'echo "Welcome ${username}"'
+                    }
+                }
+                stage("Environment validation Phase") {
+                    environment {
+                username="myusername"
+            }
+                    steps {
+                       sh 'echo "${BUILD_ID}"'
+                       sh 'echo "Welcome ${name}"'
+                       sh 'echo "Welcome ${username}"'
+                    }
+                }
+                stage("Continue") {
+                    input {
+                        message "Proceed to production?"
+                        ok "Yes"
+                        cancel "No"
+                    }
+                    steps {
+                        echo "Production"
+                    }
+                }
+            }
+        }
+           
